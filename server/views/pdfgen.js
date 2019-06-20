@@ -18,13 +18,17 @@ define([
     "module",
     "arrays/StringBuilder",
     "base64-js",
-    "wilton/fs",
+    "random",
+    "wilton/android/runOnRhino",
     "wilton/hex",
     "wilton/Logger",
-    "wilton/PDFDocument"
-], function(module, StringBuilder, base64, fs, hex, Logger, PDFDocument) {
+    "wilton/misc",
+    "wilton/PDFDocument",
+    "../conf"
+], function(module, StringBuilder, base64, Random, runOnRhino, hex, Logger, misc, PDFDocument, conf) {
     "use strict";
     var logger = new Logger(module.id);
+    var rand = new Random(Random.engines.mt19937().autoSeed());
 
     return {
         POST: function(req) {
@@ -53,13 +57,23 @@ define([
                 width: 400,
                 height: 160 
             });
-            doc.saveToFile("test.pdf");
+
+            var path = conf.appdir + "work/" + rand.uuid4() + ".pdf";
+            doc.saveToFile(path);
             doc.destroy();
+
+            if (misc.isAndroid()) {
+                runOnRhino({
+                    module: "apps/svgchart/server/rhino/showMessage",
+                    args: ["PDF saved to: [" + path + "]"]
+                });
+            }
 
             // send PDF file path
             req.sendResponse({
-                path: fs.realpath("test.pdf")
+                path: path
             });
+
         }
     };
 });

@@ -16,12 +16,14 @@
 
 define([
     "module",
+    "wilton/Channel",
+    "wilton/fs",
     "wilton/Logger",
     "wilton/loader",
     "wilton/misc",
     "wilton/Server",
     "wilton/utils"
-], function(module, Logger, loader, misc, Server, utils) {
+], function(module, Channel, fs, Logger, loader, misc, Server, utils) {
     "use strict";
     var logger = new Logger(module.id);
     utils.checkRootModuleName(module, "svgchart");
@@ -30,8 +32,14 @@ define([
         main: function() {
             var conf = loader.loadAppConfig(module);
 
+            // create necessary dirs
+            fs.mkdir(conf.appdir + "work", function() {});
+
             // init logging
             Logger.initConsole("INFO");
+
+            // share conf for other threads
+            new Channel("svgchart/server/conf", 1).send(conf);
 
             // start server
             var server = new Server({

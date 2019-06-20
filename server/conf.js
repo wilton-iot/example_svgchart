@@ -1,5 +1,5 @@
 /*
- * Copyright 2018, alex at staticlibs.net
+ * Copyright 2019, alex at staticlibs.net
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -15,19 +15,11 @@
  */
 
 define([
-    "wilton/web/httpClient"
-], function(http, utils) {
+    "module",
+    "wilton/Channel"
+], function(module, Channel) {
     "use strict";
 
-    return function(context, pngdata) {
-        http.sendRequest("/svgchart/server/views/pdfgen", {
-            data: pngdata
-        }, function(err, resp) {
-            if (err) {
-                console.error(resp.data);
-                return;
-            } 
-            alert("PDF file saved, path: [" + resp.json().path + "]");
-        });
-    };
+    // get configration provided from index.js
+    return Channel.lookup(module.id).peek();
 });
