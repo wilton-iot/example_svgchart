@@ -64,7 +64,7 @@ define([
 
             if (misc.isAndroid()) {
                 runOnRhino({
-                    module: "apps/svgchart/server/rhino/showMessage",
+                    module: "apps/example_svgchart/server/rhino/showMessage",
                     args: ["PDF saved to: [" + path + "]"]
                 });
             }
