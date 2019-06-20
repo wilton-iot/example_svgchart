@@ -1,0 +1,17 @@
+{
+    "appname": "svgchart",
+    "appdir": "{{{appdir}}}",
+
+    "server": {
+        "ipAddress": "127.0.0.1",
+        "tcpPort": 8080,
+        "cacheMaxAgeSeconds": 0,
+        "stdlibFileName": "std.wlib"
+    },
+
+    "launcher": {
+        "tcpPort": 8080,
+        "rootModuleName": "svgchart",
+        "startupModule": "svgchart/index"
+    }
+}
